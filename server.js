@@ -26,6 +26,22 @@ const express = require('express');
 // Instantiate the Express application that owns the routing table and listener.
 const app = express();
 
+// Restrict the routing surface to EXACTLY the two intended paths, in keeping with
+// the project's minimal-scope rule (only `GET /` and `GET /good-evening` exist).
+// Express's routing defaults are non-strict and case-insensitive, which would
+// otherwise let undocumented aliases resolve to the canonical routes and respond
+// 200 (e.g. "//", "/good-evening/", "/Good-evening", "/GOOD-EVENING").
+//   - 'strict routing'         : a trailing slash becomes significant, so "//" and
+//                                "/good-evening/" no longer match "/" or
+//                                "/good-evening".
+//   - 'case sensitive routing' : "/Good-evening" and "/GOOD-EVENING" no longer match
+//                                the lowercase "/good-evening".
+// These settings MUST be configured before any route is registered. With them in
+// place every undocumented alias returns 404 while the two canonical routes are
+// unchanged.
+app.set('strict routing', true);
+app.set('case sensitive routing', true);
+
 // Listening port. Honor an externally supplied PORT (e.g. from a hosting
 // platform) and fall back to 3000 for local development.
 const PORT = process.env.PORT || 3000;
