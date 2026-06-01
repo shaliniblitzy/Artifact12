@@ -2,6 +2,7 @@
   "name": "artifact12",
   "version": "1.0.0",
   "description": "Node.js Express tutorial server exposing 'Hello world' and 'Good evening' endpoints",
+  "private": true,
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
